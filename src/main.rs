@@ -67,7 +67,8 @@ impl Sandbox for TempConverter {
     fn view(&mut self) -> Element<Message> {
         let title = Text::new("Temperature converter").size(40);
 
-        let temps = Text::new(self.scale.get_conversions(self.temperature)).horizontal_alignment(HorizontalAlignment::Center);
+        let temps = Text::new(self.scale.get_conversions(self.temperature))
+            .horizontal_alignment(HorizontalAlignment::Center);
 
         let input = TextInput::new(
             &mut self.input,

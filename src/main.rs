@@ -3,15 +3,15 @@ mod scales;
 use iced::text_input::{self, TextInput};
 use iced::window;
 use iced::{
-    pick_list, Align, Column, Container, Element, HorizontalAlignment, Length, PickList, Sandbox,
-    Settings, Text,
+    pick_list, scrollable, Align, Container, Element, HorizontalAlignment, Length, PickList,
+    Sandbox, Scrollable, Settings, Text,
 };
 use scales::Scales;
 
 pub fn main() -> iced::Result {
     TempConverter::run(Settings {
         window: window::Settings {
-            size: (400, 400),
+            size: (400, 470),
             ..window::Settings::default()
         },
         ..Settings::default()
@@ -25,6 +25,7 @@ struct TempConverter {
     input: text_input::State,
     scale: Scales,
     pick_scale: pick_list::State<Scales>,
+    scroll: scrollable::State,
 }
 
 #[derive(Debug, Clone)]
@@ -38,7 +39,7 @@ impl Sandbox for TempConverter {
 
     fn new() -> Self {
         TempConverter {
-            temperature: 100.0,
+            temperature: 0.0,
             ..Self::default()
         }
     }
@@ -52,7 +53,7 @@ impl Sandbox for TempConverter {
             Message::TempChanged(val) => {
                 let temp: f32 = match val.trim().parse() {
                     Ok(num) => num,
-                    Err(_) => self.temperature,
+                    Err(_) => 0.0,
                 };
 
                 self.temperature = temp;
@@ -68,7 +69,8 @@ impl Sandbox for TempConverter {
         let title = Text::new("Temperature converter").size(40);
 
         let temps = Text::new(self.scale.get_conversions(self.temperature))
-            .horizontal_alignment(HorizontalAlignment::Center);
+            .horizontal_alignment(HorizontalAlignment::Center)
+            .size(30);
 
         let input = TextInput::new(
             &mut self.input,
@@ -86,9 +88,10 @@ impl Sandbox for TempConverter {
             Message::ScaleSelected,
         );
 
-        let content = Column::new()
+        let content = Scrollable::new(&mut self.scroll)
             .width(Length::Units(700))
             .spacing(20)
+            .padding(15)
             .align_items(Align::Center)
             .push(title)
             .push(temps)
@@ -98,7 +101,6 @@ impl Sandbox for TempConverter {
         Container::new(content)
             .width(Length::Fill)
             .height(Length::Fill)
-            .padding(10)
             .center_x()
             .center_y()
             .into()

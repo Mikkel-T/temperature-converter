@@ -51,7 +51,7 @@ impl Sandbox for TempConverter {
     fn update(&mut self, message: Message) {
         match message {
             Message::TempChanged(val) => {
-                let temp: f32 = match val.trim().parse() {
+                let temp: f32 = match val.trim().replace(',', ".").parse() {
                     Ok(num) => num,
                     Err(_) => 0.0,
                 };

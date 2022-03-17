@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+use druid::Data;
+
+#[derive(Data, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Scales {
     Celcius,
     Fahrenheit,
@@ -52,7 +54,7 @@ impl Scales {
         format!("{} ({})", self.short(), self.name())
     }
 
-    pub fn convert_to(&self, convert_to: Scales, num: f32) -> f32 {
+    pub fn convert_to(&self, convert_to: Scales, num: f64) -> f64 {
         match self {
             Scales::Celcius => match convert_to {
                 Scales::Celcius => num,
@@ -136,24 +138,10 @@ impl Scales {
             },
         }
     }
-
-    pub fn get_conversions(&self, val: f32) -> String {
-        let mut conversions: Vec<String> = Vec::new();
-        for scale in Scales::ALL {
-            conversions.push(format!("{} {}", self.convert_to(scale, val), scale.short()));
-        }
-        return conversions.join("\n");
-    }
 }
 
 impl Default for Scales {
     fn default() -> Scales {
         Scales::Celcius
-    }
-}
-
-impl std::fmt::Display for Scales {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.short_and_name())
     }
 }

@@ -13,6 +13,7 @@ pub enum Scales {
 }
 
 impl Scales {
+    // An array of the scales
     pub const ALL: [Scales; 8] = [
         Scales::Celcius,
         Scales::Fahrenheit,
@@ -24,6 +25,7 @@ impl Scales {
         Scales::Romer,
     ];
 
+    // Get the symbol for a scale
     pub fn short(&self) -> String {
         match self {
             Scales::Celcius => format!("°C"),
@@ -37,6 +39,7 @@ impl Scales {
         }
     }
 
+    // Get the name of a scale
     pub fn name(&self) -> String {
         match self {
             Scales::Celcius => format!("Celsius"),
@@ -50,10 +53,12 @@ impl Scales {
         }
     }
 
+    // Get the name and symbol for a scale
     pub fn short_and_name(&self) -> String {
         format!("{} ({})", self.short(), self.name())
     }
 
+    // Convert a scale to the others
     pub fn convert_to(&self, convert_to: Scales, num: f64) -> f64 {
         match self {
             Scales::Celcius => match convert_to {

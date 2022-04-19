@@ -145,6 +145,7 @@ impl Scales {
     }
 }
 
+// Set default scale to celcius
 impl Default for Scales {
     fn default() -> Scales {
         Scales::Celcius

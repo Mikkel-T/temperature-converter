@@ -1,108 +1,80 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod formatter;
 mod scales;
-use iced::text_input::{self, TextInput};
-use iced::window;
-use iced::{
-    pick_list, scrollable, Align, Container, Element, HorizontalAlignment, Length, PickList,
-    Sandbox, Scrollable, Settings, Text,
-};
 use scales::Scales;
 
-pub fn main() -> iced::Result {
-    TempConverter::run(Settings {
-        window: window::Settings {
-            size: (400, 470),
-            ..window::Settings::default()
-        },
-        ..Settings::default()
-    })
-}
+use druid::widget::{Align, Flex, Label, Scroll, TextBox};
+use druid::{AppLauncher, Data, Env, Lens, Widget, WidgetExt, WindowDesc};
+use druid_widget_nursery::DropdownSelect;
 
-#[derive(Default)]
-struct TempConverter {
-    temperature: f32,
-    input_state: String,
-    input: text_input::State,
+#[derive(Clone, Data, Lens)]
+struct TempConverterState {
+    temperature: f64,
     scale: Scales,
-    pick_scale: pick_list::State<Scales>,
-    scroll: scrollable::State,
 }
 
-#[derive(Debug, Clone)]
-enum Message {
-    TempChanged(String),
-    ScaleSelected(Scales),
+fn main() {
+    // Create main window
+    let main_window = WindowDesc::new(build_root_widget())
+        .title("Temperature converter")
+        .window_size((400.0, 470.0));
+
+    // Initialize state
+    let initial_state = TempConverterState {
+        temperature: 0.0,
+        scale: Scales::Celcius,
+    };
+
+    // Launch app
+    AppLauncher::with_window(main_window)
+        .launch(initial_state)
+        .expect("Failed to launch application");
 }
 
-impl Sandbox for TempConverter {
-    type Message = Message;
+fn build_root_widget() -> impl Widget<TempConverterState> {
+    // Header at the top
+    let header = Label::new("Temperature converter").with_text_size(30.0);
 
-    fn new() -> Self {
-        TempConverter {
-            temperature: 0.0,
-            ..Self::default()
-        }
-    }
+    // Make a column for all the converted temperatures
+    let mut temperatures = Flex::column();
 
-    fn title(&self) -> String {
-        String::from("Temperature converter")
-    }
-
-    fn update(&mut self, message: Message) {
-        match message {
-            Message::TempChanged(val) => {
-                let temp: f32 = match val.trim().replace(',', ".").parse() {
-                    Ok(num) => num,
-                    Err(_) => 0.0,
-                };
-
-                self.temperature = temp;
-                self.input_state = val;
-            }
-            Message::ScaleSelected(scale) => {
-                self.scale = scale;
-            }
-        }
-    }
-
-    fn view(&mut self) -> Element<Message> {
-        let title = Text::new("Temperature converter").size(40);
-
-        let temps = Text::new(self.scale.get_conversions(self.temperature))
-            .horizontal_alignment(HorizontalAlignment::Center)
-            .size(30);
-
-        let input = TextInput::new(
-            &mut self.input,
-            "Input temperature",
-            &self.input_state,
-            Message::TempChanged,
-        )
-        .width(Length::Fill)
-        .padding(15);
-
-        let scale_list = PickList::new(
-            &mut self.pick_scale,
-            &Scales::ALL[..],
-            Some(self.scale),
-            Message::ScaleSelected,
+    // Add all the converted temperatures to the column
+    for scale in Scales::ALL {
+        temperatures.add_child(
+            Label::new(move |data: &TempConverterState, _env: &Env| {
+                format!(
+                    "{} {}",
+                    data.scale.convert_to(scale, data.temperature),
+                    scale.short()
+                )
+            })
+            .with_text_size(25.0),
         );
-
-        let content = Scrollable::new(&mut self.scroll)
-            .width(Length::Units(700))
-            .spacing(20)
-            .padding(15)
-            .align_items(Align::Center)
-            .push(title)
-            .push(temps)
-            .push(input)
-            .push(scale_list);
-
-        Container::new(content)
-            .width(Length::Fill)
-            .height(Length::Fill)
-            .center_x()
-            .center_y()
-            .into()
     }
+
+    // Temperature input
+    let textbox = TextBox::new()
+        .with_formatter(formatter::TemperatureFormatter)
+        .lens(TempConverterState::temperature);
+
+    // Label for the textbox that shows the current tempereture
+    let temp_label = Flex::row().with_child(textbox).with_child(Label::new(
+        |data: &TempConverterState, _env: &Env| format!("{}", data.scale.short()),
+    ));
+
+    // Dropdown to select the temperature scale
+    let dropdown = DropdownSelect::new(Scales::ALL.map(|i| (i.short_and_name(), i)))
+        .lens(TempConverterState::scale);
+
+    // Collect all the widgets
+    let layout = Flex::column()
+        .with_child(header)
+        .with_child(temperatures)
+        .with_spacer(10.)
+        .with_child(temp_label)
+        .with_spacer(10.)
+        .with_child(dropdown);
+
+    // Return all the widgets in a scrollable centered widget
+    Align::centered(Scroll::new(layout))
 }

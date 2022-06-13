@@ -7,9 +7,12 @@ use druid::widget::{Align, Flex, Label, Scroll, TextBox};
 use druid::{AppLauncher, Data, Env, Lens, Widget, WidgetExt, WindowDesc};
 use druid_widget_nursery::DropdownSelect;
 
+/// The state for the temperature converter
 #[derive(Clone, Data, Lens)]
 struct TempConverterState {
+    /// The current temperature inputted
     temperature: f64,
+    /// The scale that is currently being used
     scale: Scales,
 }
 

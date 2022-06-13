@@ -1,19 +1,30 @@
 use druid::Data;
 
+/// The scales that can be converted to and from
+///
+/// Data and scales taken from https://en.wikipedia.org/wiki/Conversion_of_scales_of_temperature
 #[derive(Data, Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Scales {
+    /// The celcius scale which is also the default
     Celcius,
+    /// The fahrenheit scale
     Fahrenheit,
+    /// The kelvin scale
     Kelvin,
+    /// The rankine scale
     Rankine,
+    /// The delisle scale
     Delisle,
+    /// The newton scale
     Newton,
+    /// The réaumur scale
     Reaumur,
+    /// The rømer scale
     Romer,
 }
 
 impl Scales {
-    // An array of the scales
+    /// An array of the scales
     pub const ALL: [Scales; 8] = [
         Scales::Celcius,
         Scales::Fahrenheit,
@@ -25,7 +36,7 @@ impl Scales {
         Scales::Romer,
     ];
 
-    // Get the symbol for a scale
+    /// Get the symbol for a scale
     pub fn short(&self) -> String {
         match self {
             Scales::Celcius => format!("°C"),
@@ -39,7 +50,7 @@ impl Scales {
         }
     }
 
-    // Get the name of a scale
+    /// Get the name of a scale
     pub fn name(&self) -> String {
         match self {
             Scales::Celcius => format!("Celsius"),
@@ -53,12 +64,12 @@ impl Scales {
         }
     }
 
-    // Get the name and symbol for a scale
+    /// Get the name and symbol for a scale
     pub fn short_and_name(&self) -> String {
         format!("{} ({})", self.short(), self.name())
     }
 
-    // Convert a scale to the others
+    /// Convert a scale to the others
     pub fn convert_to(&self, convert_to: Scales, num: f64) -> f64 {
         match self {
             Scales::Celcius => match convert_to {

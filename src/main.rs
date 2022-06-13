@@ -38,10 +38,10 @@ fn build_root_widget() -> impl Widget<TempConverterState> {
     // Header at the top
     let header = Label::new("Temperature converter").with_text_size(30.0);
 
-    // Make a column for all the converted temperatures
+    // Make a column for all the temperatures
     let mut temperatures = Flex::column();
 
-    // Add all the converted temperatures to the column
+    // Add all the temperatures to the column
     for scale in Scales::ALL {
         temperatures.add_child(
             Label::new(move |data: &TempConverterState, _env: &Env| {
@@ -60,12 +60,12 @@ fn build_root_widget() -> impl Widget<TempConverterState> {
         .with_formatter(formatter::TemperatureFormatter)
         .lens(TempConverterState::temperature);
 
-    // Label for the textbox that shows the current tempereture
+    // Label for the textbox that shows the current temperature
     let temp_label = Flex::row().with_child(textbox).with_child(Label::new(
         |data: &TempConverterState, _env: &Env| format!("{}", data.scale.short()),
     ));
 
-    // Dropdown to select the temperature scale
+    // Dropdown to select the temperature scale to convert from
     let dropdown = DropdownSelect::new(Scales::ALL.map(|i| (i.short_and_name(), i)))
         .lens(TempConverterState::scale);
 

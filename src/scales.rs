@@ -1,11 +1,10 @@
-use druid::Data;
-
 /// The scales that can be converted to and from
 ///
 /// Data and scales taken from https://en.wikipedia.org/wiki/Conversion_of_scales_of_temperature
-#[derive(Data, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Scales {
     /// The celcius scale which is also the default
+    #[default]
     Celcius,
     /// The fahrenheit scale
     Fahrenheit,
@@ -62,11 +61,6 @@ impl Scales {
             Scales::Reaumur => format!("Réaumur"),
             Scales::Romer => format!("Rømer"),
         }
-    }
-
-    /// Get the name and symbol for a scale
-    pub fn short_and_name(&self) -> String {
-        format!("{} ({})", self.short(), self.name())
     }
 
     /// Convert a scale to the others
@@ -156,9 +150,8 @@ impl Scales {
     }
 }
 
-// Set default scale to celcius
-impl Default for Scales {
-    fn default() -> Scales {
-        Scales::Celcius
+impl std::fmt::Display for Scales {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} ({})", self.short(), self.name())
     }
 }

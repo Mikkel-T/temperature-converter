@@ -1,7 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod scales;
+
 use scales::Scales;
 
+use iced::font::{Font, Weight};
 use iced::widget::{column, container, pick_list, row, text, text_input};
 use iced::{Alignment, Element, Sandbox, Settings};
 
@@ -74,7 +76,7 @@ impl Sandbox for TemperatureConverter {
                             .convert_to(i.to_owned(), self.temperature),
                         i.short()
                     ))
-                    .size(30)
+                    .size(25)
                     .into()
                 })
                 .collect(),
@@ -88,7 +90,10 @@ impl Sandbox for TemperatureConverter {
 
         container(
             column![
-                text("Temperature converter").size(35),
+                text("Temperature converter").size(30).font(Font {
+                    weight: Weight::Bold,
+                    ..Default::default()
+                }),
                 temp_column,
                 row![input, text(self.scale.unwrap_or_default().short())]
                     .spacing(5)

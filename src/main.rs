@@ -54,10 +54,7 @@ impl Sandbox for TemperatureConverter {
                 self.input = temperature;
             }
             Message::UpdateTemperature => {
-                self.temperature = match self.input.trim().replace(',', ".").parse() {
-                    Ok(num) => num,
-                    Err(_) => 0.0,
-                };
+                self.temperature = self.input.trim().replace(',', ".").parse().unwrap_or(0.0);
                 self.input = self.temperature.to_string();
             }
         }

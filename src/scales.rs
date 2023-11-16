@@ -38,28 +38,28 @@ impl Scales {
     /// Get the symbol for a scale
     pub fn short(&self) -> String {
         match self {
-            Scales::Celcius => format!("°C"),
-            Scales::Fahrenheit => format!("°F"),
-            Scales::Kelvin => format!("K"),
-            Scales::Rankine => format!("°R"),
-            Scales::Delisle => format!("°De"),
-            Scales::Newton => format!("°N"),
-            Scales::Reaumur => format!("°Ré"),
-            Scales::Romer => format!("°Rø"),
+            Scales::Celcius => "°C".to_string(),
+            Scales::Fahrenheit => "°F".to_string(),
+            Scales::Kelvin => "K".to_string(),
+            Scales::Rankine => "°R".to_string(),
+            Scales::Delisle => "°De".to_string(),
+            Scales::Newton => "°N".to_string(),
+            Scales::Reaumur => "°Ré".to_string(),
+            Scales::Romer => "°Rø".to_string(),
         }
     }
 
     /// Get the name of a scale
     pub fn name(&self) -> String {
         match self {
-            Scales::Celcius => format!("Celsius"),
-            Scales::Fahrenheit => format!("Fahrenheit"),
-            Scales::Kelvin => format!("Kelvin"),
-            Scales::Rankine => format!("Rankine"),
-            Scales::Delisle => format!("Delisle"),
-            Scales::Newton => format!("Newton"),
-            Scales::Reaumur => format!("Réaumur"),
-            Scales::Romer => format!("Rømer"),
+            Scales::Celcius => "Celsius".to_string(),
+            Scales::Fahrenheit => "Fahrenheit".to_string(),
+            Scales::Kelvin => "Kelvin".to_string(),
+            Scales::Rankine => "Rankine".to_string(),
+            Scales::Delisle => "Delisle".to_string(),
+            Scales::Newton => "Newton".to_string(),
+            Scales::Reaumur => "Réaumur".to_string(),
+            Scales::Romer => "Rømer".to_string(),
         }
     }
 

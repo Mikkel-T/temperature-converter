@@ -1,6 +1,6 @@
 /// The scales that can be converted to and from
 ///
-/// Data and scales taken from https://en.wikipedia.org/wiki/Conversion_of_scales_of_temperature
+/// Data and scales taken from <https://en.wikipedia.org/wiki/Conversion_of_scales_of_temperature>
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Scales {
     /// The celcius scale which is also the default
@@ -24,127 +24,127 @@ pub enum Scales {
 
 impl Scales {
     /// An array of the scales
-    pub const ALL: [Scales; 8] = [
-        Scales::Celcius,
-        Scales::Fahrenheit,
-        Scales::Kelvin,
-        Scales::Rankine,
-        Scales::Delisle,
-        Scales::Newton,
-        Scales::Reaumur,
-        Scales::Romer,
+    pub const ALL: [Self; 8] = [
+        Self::Celcius,
+        Self::Fahrenheit,
+        Self::Kelvin,
+        Self::Rankine,
+        Self::Delisle,
+        Self::Newton,
+        Self::Reaumur,
+        Self::Romer,
     ];
 
     /// Get the symbol for a scale
-    pub fn short(&self) -> String {
+    pub fn short(self) -> String {
         match self {
-            Scales::Celcius => "°C".to_string(),
-            Scales::Fahrenheit => "°F".to_string(),
-            Scales::Kelvin => "K".to_string(),
-            Scales::Rankine => "°R".to_string(),
-            Scales::Delisle => "°De".to_string(),
-            Scales::Newton => "°N".to_string(),
-            Scales::Reaumur => "°Ré".to_string(),
-            Scales::Romer => "°Rø".to_string(),
+            Self::Celcius => "°C".to_string(),
+            Self::Fahrenheit => "°F".to_string(),
+            Self::Kelvin => "K".to_string(),
+            Self::Rankine => "°R".to_string(),
+            Self::Delisle => "°De".to_string(),
+            Self::Newton => "°N".to_string(),
+            Self::Reaumur => "°Ré".to_string(),
+            Self::Romer => "°Rø".to_string(),
         }
     }
 
     /// Get the name of a scale
-    pub fn name(&self) -> String {
+    pub fn name(self) -> String {
         match self {
-            Scales::Celcius => "Celsius".to_string(),
-            Scales::Fahrenheit => "Fahrenheit".to_string(),
-            Scales::Kelvin => "Kelvin".to_string(),
-            Scales::Rankine => "Rankine".to_string(),
-            Scales::Delisle => "Delisle".to_string(),
-            Scales::Newton => "Newton".to_string(),
-            Scales::Reaumur => "Réaumur".to_string(),
-            Scales::Romer => "Rømer".to_string(),
+            Self::Celcius => "Celsius".to_string(),
+            Self::Fahrenheit => "Fahrenheit".to_string(),
+            Self::Kelvin => "Kelvin".to_string(),
+            Self::Rankine => "Rankine".to_string(),
+            Self::Delisle => "Delisle".to_string(),
+            Self::Newton => "Newton".to_string(),
+            Self::Reaumur => "Réaumur".to_string(),
+            Self::Romer => "Rømer".to_string(),
         }
     }
 
     /// Convert a scale to the others
-    pub fn convert_to(&self, convert_to: Scales, num: f64) -> f64 {
+    pub fn convert_to(self, convert_to: Self, num: f64) -> f64 {
         match self {
-            Scales::Celcius => match convert_to {
-                Scales::Celcius => num,
-                Scales::Fahrenheit => num * (9. / 5.) + 32.,
-                Scales::Kelvin => num + 273.15,
-                Scales::Rankine => (num + 273.15) * (9. / 5.),
-                Scales::Delisle => (100. - num) * (3. / 2.),
-                Scales::Newton => num * (33. / 100.),
-                Scales::Reaumur => num * (4. / 5.),
-                Scales::Romer => num * (21. / 40.) + 7.5,
+            Self::Celcius => match convert_to {
+                Self::Celcius => num,
+                Self::Fahrenheit => num.mul_add(9. / 5., 32.),
+                Self::Kelvin => num + 273.15,
+                Self::Rankine => (num + 273.15) * (9. / 5.),
+                Self::Delisle => (100. - num) * (3. / 2.),
+                Self::Newton => num * (33. / 100.),
+                Self::Reaumur => num * (4. / 5.),
+                Self::Romer => num.mul_add(21. / 40., 7.5),
             },
-            Scales::Fahrenheit => match convert_to {
-                Scales::Celcius => (num - 32.) * (5. / 9.),
-                Scales::Fahrenheit => num,
-                Scales::Kelvin => (num + 459.67) * (5. / 9.),
-                Scales::Rankine => num + 459.67,
-                Scales::Delisle => (212. - num) * (5. / 6.),
-                Scales::Newton => (num - 32.) * (11. / 60.),
-                Scales::Reaumur => (num - 32.) * (4. / 9.),
-                Scales::Romer => (num - 32.) * (7. / 24.) + 7.5,
+            Self::Fahrenheit => match convert_to {
+                Self::Celcius => (num - 32.) * (5. / 9.),
+                Self::Fahrenheit => num,
+                Self::Kelvin => (num + 459.67) * (5. / 9.),
+                Self::Rankine => num + 459.67,
+                Self::Delisle => (212. - num) * (5. / 6.),
+                Self::Newton => (num - 32.) * (11. / 60.),
+                Self::Reaumur => (num - 32.) * (4. / 9.),
+                Self::Romer => (num - 32.).mul_add(7. / 24., 7.5),
             },
-            Scales::Kelvin => match convert_to {
-                Scales::Celcius => num - 273.15,
-                Scales::Fahrenheit => num * (9. / 5.) - 459.67,
-                Scales::Kelvin => num,
-                Scales::Rankine => num * (9. / 5.),
-                Scales::Delisle => (373.15 - num) * (3. / 2.),
-                Scales::Newton => (num - 273.15) * (33. / 100.),
-                Scales::Reaumur => (num - 273.15) * (4. / 5.),
-                Scales::Romer => (num - 273.15) * (21. / 40.) + 7.5,
+            Self::Kelvin => match convert_to {
+                Self::Celcius => num - 273.15,
+                Self::Fahrenheit => num.mul_add(9. / 5., -459.67),
+                Self::Kelvin => num,
+                Self::Rankine => num * (9. / 5.),
+                Self::Delisle => (373.15 - num) * (3. / 2.),
+                Self::Newton => (num - 273.15) * (33. / 100.),
+                Self::Reaumur => (num - 273.15) * (4. / 5.),
+                Self::Romer => (num - 273.15).mul_add(21. / 40., 7.5),
             },
-            Scales::Rankine => match convert_to {
-                Scales::Celcius => (num - 491.67) * (5. / 9.),
-                Scales::Fahrenheit => num - 459.67,
-                Scales::Kelvin => num * (5. / 9.),
-                Scales::Rankine => num,
-                Scales::Delisle => (671.67 - num) * (5. / 6.),
-                Scales::Newton => (num - 491.67) * (11. / 60.),
-                Scales::Reaumur => (num - 491.67) * (4. / 9.),
-                Scales::Romer => (num - 491.67) * (7. / 24.) + 7.5,
+            Self::Rankine => match convert_to {
+                Self::Celcius => (num - 491.67) * (5. / 9.),
+                Self::Fahrenheit => num - 459.67,
+                Self::Kelvin => num * (5. / 9.),
+                Self::Rankine => num,
+                Self::Delisle => (671.67 - num) * (5. / 6.),
+                Self::Newton => (num - 491.67) * (11. / 60.),
+                Self::Reaumur => (num - 491.67) * (4. / 9.),
+                Self::Romer => (num - 491.67).mul_add(7. / 24., 7.5),
             },
-            Scales::Delisle => match convert_to {
-                Scales::Celcius => 100. - num * (2. / 3.),
-                Scales::Fahrenheit => 212. - num * (6. / 5.),
-                Scales::Kelvin => 373.15 - num * (2. / 3.),
-                Scales::Rankine => 671.67 - num * (6. / 5.),
-                Scales::Delisle => num,
-                Scales::Newton => 33. - num * (11. / 50.),
-                Scales::Reaumur => 80. - num * (8. / 15.),
-                Scales::Romer => 60. - num * (7. / 20.),
+            Self::Delisle => match convert_to {
+                Self::Celcius => num.mul_add(-(2. / 3.), 100.),
+                Self::Fahrenheit => num.mul_add(-(6. / 5.), 212.),
+                Self::Kelvin => num.mul_add(-(2. / 3.), 373.15),
+                Self::Rankine => num.mul_add(-(6. / 5.), 671.67),
+                Self::Delisle => num,
+                Self::Newton => num.mul_add(-(11. / 50.), 33.),
+                Self::Reaumur => num.mul_add(-(8. / 15.), 80.),
+                Self::Romer => num.mul_add(-(7. / 20.), 60.),
             },
-            Scales::Newton => match convert_to {
-                Scales::Celcius => num * (100. / 33.),
-                Scales::Fahrenheit => num * (60. / 11.) + 32.,
-                Scales::Kelvin => num * (100. / 33.) + 273.15,
-                Scales::Rankine => num * (60. / 11.) + 491.67,
-                Scales::Delisle => (33. - num) * (50. / 11.),
-                Scales::Newton => num,
-                Scales::Reaumur => num * (80. / 33.),
-                Scales::Romer => num * (35. / 22.) + 7.5,
+            Self::Newton => match convert_to {
+                Self::Celcius => num * (100. / 33.),
+                Self::Fahrenheit => num.mul_add(60. / 11., 32.),
+                Self::Kelvin => num.mul_add(100. / 33., 273.15),
+                Self::Rankine => num.mul_add(60. / 11., 491.67),
+                Self::Delisle => (33. - num) * (50. / 11.),
+                Self::Newton => num,
+                Self::Reaumur => num * (80. / 33.),
+                Self::Romer => num.mul_add(35. / 22., 7.5),
             },
-            Scales::Reaumur => match convert_to {
-                Scales::Celcius => num * (5. / 4.),
-                Scales::Fahrenheit => num * (9. / 4.) + 32.,
-                Scales::Kelvin => num * (5. / 4.) + 273.15,
-                Scales::Rankine => num * (9. / 4.) + 491.67,
-                Scales::Delisle => (80. - num) * (15. / 8.),
-                Scales::Newton => num * (33. / 80.),
-                Scales::Reaumur => num,
-                Scales::Romer => num * (21. / 32.) + 7.5,
+            Self::Reaumur => match convert_to {
+                Self::Celcius => num * (5. / 4.),
+                Self::Fahrenheit => num.mul_add(9. / 4., 32.),
+                Self::Kelvin => num.mul_add(5. / 4., 273.15),
+                Self::Rankine => num.mul_add(9. / 4., 491.67),
+                Self::Delisle => (80. - num) * (15. / 8.),
+                Self::Newton => num * (33. / 80.),
+                Self::Reaumur => num,
+                Self::Romer => num.mul_add(21. / 32., 7.5),
             },
-            Scales::Romer => match convert_to {
-                Scales::Celcius => (num - 7.5) * (40. / 21.),
-                Scales::Fahrenheit => (num - 7.5) * (24. / 7.) + 32.,
-                Scales::Kelvin => (num - 7.5) * (40. / 21.) + 273.15,
-                Scales::Rankine => (num - 7.5) * (24. / 7.) + 491.67,
-                Scales::Delisle => (60. - num) * (20. / 7.),
-                Scales::Newton => (num - 7.5) * (22. / 35.),
-                Scales::Reaumur => (num - 7.5) * (32. / 21.),
-                Scales::Romer => num,
+            Self::Romer => match convert_to {
+                Self::Celcius => (num - 7.5) * (40. / 21.),
+                Self::Fahrenheit => (num - 7.5).mul_add(24. / 7., 32.),
+                Self::Kelvin => (num - 7.5).mul_add(40. / 21., 273.15),
+                Self::Rankine => (num - 7.5).mul_add(24. / 7., 491.67),
+                Self::Delisle => (60. - num) * (20. / 7.),
+                Self::Newton => (num - 7.5) * (22. / 35.),
+                Self::Reaumur => (num - 7.5) * (32. / 21.),
+                Self::Romer => num,
             },
         }
     }

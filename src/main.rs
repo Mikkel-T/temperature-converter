@@ -1,11 +1,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 mod scales;
 
+use iced::{
+    font::{Font, Weight},
+    widget::{column, container, pick_list, row, text, text_input},
+    {Alignment, Element, Sandbox, Settings},
+};
 use scales::Scales;
-
-use iced::font::{Font, Weight};
-use iced::widget::{column, container, pick_list, row, text, text_input};
-use iced::{Alignment, Element, Sandbox, Settings};
 
 fn main() -> iced::Result {
     TemperatureConverter::run(Settings {
